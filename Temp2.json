@@ -65,24 +65,15 @@
         "adminPassword": {
             "type": "securestring"
         },
-        "diagnosticsStorageAccountName": {
-            "type": "string"
-        },
-        "diagnosticsStorageAccountId": {
-            "type": "string"
-        },
-        "diagnosticsStorageAccountType": {
-            "type": "string"
-        },
-        "diagnosticsStorageAccountKind": {
-            "type": "string"
-        }
+        
     },
     "variables": {
         "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
         "publicIPName": "[concat(parameters('virtualMachineName'),'Pip')]",
         "vnetId": "[parameters('virtualNetworkId')]",
-        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+        "storageAccountName": "[concat(uniquestring(resourceGroup().id, deployment().name))]",
+
     },
     "resources": [
         {
@@ -131,7 +122,7 @@
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]"
+                
             ],
             "properties": {
                 "hardwareProfile": {
@@ -167,24 +158,8 @@
                         "provisionVmAgent": true
                     }
                 },
-                "licenseType": "Windows_Client",
-                "diagnosticsProfile": {
-                    "bootDiagnostics": {
-                        "enabled": true,
-                        "storageUri": "[concat('https://', parameters('diagnosticsStorageAccountName'), '.blob.core.windows.net/')]"
-                    }
-                }
-            }
-        },
-        {
-            "name": "[parameters('diagnosticsStorageAccountName')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
-            "location": "[parameters('location')]",
-            "properties": {},
-            "kind": "[parameters('diagnosticsStorageAccountKind')]",
-            "sku": {
-                "name": "[parameters('diagnosticsStorageAccountType')]"
+                "licenseType": "Windows_Client"
+                
             }
         }
     ],
