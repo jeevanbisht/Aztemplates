@@ -11,7 +11,11 @@
 
         },
         "networkInterfaceName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "adCLNic",
+            "metadata": {
+              "description": "The default Net Inteface Name"
+            }
         },
         "networkSecurityGroupName": {
             "type": "string"
