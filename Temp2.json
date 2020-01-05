@@ -38,18 +38,10 @@
                 "description": "Default VNET Name."
               }
         },
-        "publicIpAddressName": {
-            "type": "string"
-        },
-        "publicIpAddressType": {
-            "type": "string"
-        },
-        "publicIpAddressSku": {
-            "type": "string"
-        },
+        
         "virtualMachineName": {
             "type": "string",
-            "defaultValue": "ADCl1",
+            "defaultValue": "ADsftCl1",
             "metadata": {
               "description": "The Name of VM"
             }
@@ -88,6 +80,7 @@
     },
     "variables": {
         "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
+        "publicIPName": "[concat(parameters('virtualMachineName'),'Pip')]",
         "vnetId": "[parameters('virtualNetworkId')]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
     },
@@ -99,7 +92,7 @@
             "location": "[parameters('location')]",
             "dependsOn": [
 
-                "[concat('Microsoft.Network/publicIpAddresses/', parameters('publicIpAddressName'))]"
+                "[concat('Microsoft.Network/publicIpAddresses/', parameters('publicIPName'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -111,7 +104,7 @@
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('publicIPName'))]"
                             }
                         }
                     }
@@ -122,16 +115,14 @@
             }
         },
         {
-            "name": "[parameters('publicIpAddressName')]",
+            "name": "[parameters('publicIPName')]",
             "type": "Microsoft.Network/publicIpAddresses",
             "apiVersion": "2019-02-01",
             "location": "[parameters('location')]",
             "properties": {
-                "publicIpAllocationMethod": "[parameters('publicIpAddressType')]"
+                "publicIPAllocationMethod": "Dynamic"
             },
-            "sku": {
-                "name": "[parameters('publicIpAddressSku')]"
-            }
+            
         },
         {
             "name": "[parameters('virtualMachineName')]",
