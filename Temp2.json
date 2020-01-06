@@ -83,7 +83,7 @@
             "location": "[parameters('location')]",
             "dependsOn": [
 
-                "[concat('Microsoft.Network/publicIpAddresses/', parameters('publicIPName'))]"
+                "[concat('Microsoft.Network/publicIpAddresses/', variables('publicIPName'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -95,7 +95,7 @@
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('publicIPName'))]"
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('publicIPName'))]"
                             }
                         }
                     }
@@ -106,7 +106,7 @@
             }
         },
         {
-            "name": "[parameters('publicIPName')]",
+            "name": "[variables('publicIPName')]",
             "type": "Microsoft.Network/publicIpAddresses",
             "apiVersion": "2019-02-01",
             "location": "[parameters('location')]",
